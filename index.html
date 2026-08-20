@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoTriagem — Classificador de Resíduos</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">♻</span>
+        <div>
+          <h1>EcoTriagem</h1>
+          <p class="tagline">Classificação de resíduos em tempo real com Teachable Machine</p>
+        </div>
+      </div>
+      <div id="status" class="status status--loading">Carregando modelo…</div>
+    </header>
+
+    <main class="layout">
+      <!-- ───────── coluna 1: câmera + predições ───────── -->
+      <section class="panel panel--camera">
+        <h2>1. Entrada ao vivo</h2>
+        <div class="camera-wrap">
+          <video id="webcam" autoplay playsinline muted></video>
+          <div id="overlay" class="overlay">
+            <span id="overlay-label">—</span>
+            <span id="overlay-conf"></span>
+          </div>
+          <div id="flash" class="flash"></div>
+        </div>
+
+        <div class="controls">
+          <button id="btn-toggle" class="btn btn--primary" type="button">Pausar</button>
+          <label class="slider">
+            Limiar de confiança: <output id="thr-out">85%</output>
+            <input id="thr" type="range" min="50" max="99" value="85" />
+          </label>
+        </div>
+
+        <h3>Confiança por classe</h3>
+        <ul id="bars" class="bars"><li class="hint">Aguardando o modelo…</li></ul>
+
+        <p class="stability">
+          Estabilidade: <strong id="streak">0</strong> /
+          <span id="streak-target">8</span> quadros consecutivos
+          <span id="armed" class="chip chip--ok">pronto</span>
+        </p>
+      </section>
+
+      <!-- ───────── coluna 2: a AÇÃO automatizada ───────── -->
+      <section class="panel panel--action">
+        <h2>2. Ação automatizada</h2>
+        <p class="panel-sub">
+          Disparada <strong>sozinha</strong> pela predição — nenhum clique envolvido.
+        </p>
+
+        <div id="bins" class="bins"></div>
+
+        <div id="action-card" class="action-card action-card--idle">
+          <span class="action-eyebrow">Última ação executada</span>
+          <strong id="action-title">Nenhuma ainda</strong>
+          <span id="action-detail">Aponte um resíduo para a câmera.</span>
+        </div>
+      </section>
+
+      <!-- ───────── coluna 3: dashboard ───────── -->
+      <section class="panel panel--dash">
+        <h2>3. Dashboard da sessão</h2>
+        <div id="totals" class="totals"></div>
+        <div class="dash-head">
+          <h3>Histórico</h3>
+          <div class="dash-actions">
+            <button id="btn-csv" class="btn btn--ghost" type="button">Exportar CSV</button>
+            <button id="btn-reset" class="btn btn--ghost" type="button">Zerar</button>
+          </div>
+        </div>
+        <ol id="log" class="log"><li class="hint">Sem registros nesta sessão.</li></ol>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Modelo: Teachable Machine (imagem) → TensorFlow.js · inferência 100% no navegador</span>
+      <span id="fps" class="fps"></span>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
