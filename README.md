@@ -5,13 +5,9 @@ Teachable Machine** para identificar, pela webcam, o tipo de resíduo que a
 pessoa está segurando e **acionar automaticamente a lixeira correta** — sem
 nenhum clique.
 
-**Dupla:** `NOME 1 (RA ...)` · `NOME 2 (RA ...)` <!-- TODO: preencher -->
-
-![Interface do EcoTriagem](docs/interface-modo-demo.jpg)
+**Dupla:** `Abraão Sousa de Andrade` · `Arthur Scortegagna Almeida`
+## GIF de Entrega do Projeto
 ![Vídeo de demonstração (Entrega)](docs/ezgif-7b787ee546351fc5.gif)
-
-<!-- TODO: substituir/complementar pelo GIF gravado com o modelo real -->
-<!-- ![Demonstração](docs/demo.gif) -->
 
 ---
 
