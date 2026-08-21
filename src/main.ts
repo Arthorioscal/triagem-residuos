@@ -4,7 +4,7 @@ import { Stabilizer } from "./core/stabilizer";
 import { SessionStore } from "./core/store";
 import { Classifier, topPrediction, type ImageClassifier } from "./model/classifier";
 import { MockClassifier } from "./model/mockClassifier";
-import { startWebcam } from "./model/webcam";
+import { startWebcam, stopWebcam } from "./model/webcam";
 import { Dashboard } from "./ui/dashboard";
 import { Feedback } from "./ui/feedback";
 
@@ -98,8 +98,29 @@ resetBtn.addEventListener("click", () => {
   ui.setStatus(running ? liveLabel() : "Pausado", running ? "ok" : "paused");
 });
 
+/**
+ * Encerra o laço e devolve a câmera ao sistema. Precisa rodar em toda saída:
+ * sem isso a webcam fica retida e o navegador abre um stream novo a cada
+ * recarga (é o que fazia a luz da câmera piscar durante o desenvolvimento).
+ */
+function teardown(): void {
+  running = false;
+  window.clearTimeout(loopTimer);
+  stopWebcam(video);
+}
+
+window.addEventListener("pagehide", teardown);
+import.meta.hot?.dispose(teardown);
+
 async function boot(): Promise<void> {
   try {
+    // O modelo é carregado ANTES da câmera de propósito: se ele estiver
+    // faltando, a webcam nunca é ligada — nada de acender a luz da câmera e
+    // pedir permissão para depois falhar.
+    ui.setStatus(demoMode ? "Carregando modelo simulado…" : "Carregando modelo…", "loading");
+    await classifier.load();
+    console.info("[modelo] classes treinadas:", classifier.labels.join(", "));
+
     ui.setStatus("Pedindo acesso à webcam…", "loading");
     try {
       await startWebcam(video);
@@ -110,16 +131,13 @@ async function boot(): Promise<void> {
       console.warn("[demo] seguindo sem webcam:", error);
     }
 
-    ui.setStatus(demoMode ? "Carregando modelo simulado…" : "Carregando modelo…", "loading");
-    await classifier.load();
-    console.info("[modelo] classes treinadas:", classifier.labels.join(", "));
-
     thresholdInput.value = String(Math.round(CONFIG.confidenceThreshold * 100));
     thresholdOut.textContent = `${thresholdInput.value}%`;
     stabilizer.setThreshold(CONFIG.confidenceThreshold);
 
     start();
   } catch (error) {
+    teardown(); // qualquer falha libera o dispositivo em vez de deixá-lo preso
     const message = error instanceof Error ? error.message : String(error);
     ui.setStatus(message, "error");
     console.error(error);
