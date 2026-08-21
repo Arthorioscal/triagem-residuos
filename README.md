@@ -8,6 +8,7 @@ nenhum clique.
 **Dupla:** `NOME 1 (RA ...)` · `NOME 2 (RA ...)` <!-- TODO: preencher -->
 
 ![Interface do EcoTriagem](docs/interface-modo-demo.jpg)
+![Vídeo de demonstração (Entrega)](docs/ezgif-7b787ee546351fc5.gif)
 
 <!-- TODO: substituir/complementar pelo GIF gravado com o modelo real -->
 <!-- ![Demonstração](docs/demo.gif) -->
