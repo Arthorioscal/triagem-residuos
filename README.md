@@ -110,9 +110,12 @@ próprio, o passo a passo está em [`public/model/README.md`](public/model/READM
 npm run dev
 ```
 
-O Vite abre `http://localhost:5173` automaticamente. **Autorize o acesso à
-câmera** quando o navegador pedir — é obrigatório, é dela que vem a entrada ao
-vivo.
+O Vite abre o navegador automaticamente na porta que estiver livre — normalmente
+`http://localhost:5173`, ou `5174` em diante se a 5173 já estiver ocupada por
+outro projeto. **Confira a URL que o terminal imprime.**
+
+**Autorize o acesso à câmera** quando o navegador pedir — é obrigatório, é dela
+que vem a entrada ao vivo.
 
 > ⚠️ Abra sempre por `http://localhost`. Navegadores só liberam a webcam em
 > `localhost` ou em HTTPS; abrir o `index.html` como arquivo (`file://`) não
@@ -138,6 +141,8 @@ npm run preview     # serve o dist/ para conferir o build
 ### Modo demonstração (sem modelo / sem webcam)
 
 Para conferir a interface e a ação antes de o modelo estar treinado:
+
+Acrescente `?demo=1` na URL que o Vite imprimiu:
 
 ```
 http://localhost:5173/?demo=1
